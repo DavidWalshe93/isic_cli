@@ -8,7 +8,7 @@ Date:       12 February 2021
 # ===========================================================
 COMMAND_CONTEXT_SETTINGS = {
     "context_settings": {
-        "help_options_names": ["-h", "--help"]
+        "help_option_names": ["-h", "--help"]
     }
 }
 
