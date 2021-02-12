@@ -4,7 +4,6 @@ Date:       12 February 2021
 """
 
 # Setup logger config
-import src.logger.logger_setup
 
 # Core Modules
 import logging
@@ -13,6 +12,8 @@ import logging
 import click
 
 # Custom Modules
+from src.cli.config import GROUP_CONTEXT_SETTINGS
+from src.cli.commands.image import image
 
 
 logger = logging.getLogger(__name__)
@@ -27,13 +28,22 @@ def cli(**kwargs):
 
 
 # ==================================================
+# Add CLI groups
+# ==================================================
+groups = [
+    image
+]
+
+for group in groups:
+    cli.add_command(group)
+
+# ==================================================
 # Add CLI commands
 # ==================================================
 commands = [
-
 ]
 
-for commands in commands:
+for command in commands:
     cli.add_command(command)
 
 if __name__ == '__main__':
