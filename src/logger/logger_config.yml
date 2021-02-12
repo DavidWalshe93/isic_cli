@@ -31,5 +31,6 @@ handlers:
 
 root:
   level: NOTSET
-  handlers: [console, file]
+  # Add "file" to list to enable file logging if needed.
+  handlers: [console]
   propogate: yes
