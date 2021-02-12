@@ -3,6 +3,7 @@ Author:     David Walshe
 Date:       12 February 2021
 """
 
+import os
 import logging.config
 
 # Get the logger config in the same directory as this file.
