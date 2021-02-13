@@ -13,7 +13,8 @@ import click
 
 # Custom Modules
 from src.cli.config import GROUP_CONTEXT_SETTINGS
-from src.cli.commands.image import image
+from src.cli.commands.image.image import image
+from src.cli.commands.gather import gather
 
 
 logger = logging.getLogger(__name__)
@@ -41,6 +42,7 @@ for group in groups:
 # Add CLI commands
 # ==================================================
 commands = [
+    gather
 ]
 
 for command in commands:
