@@ -9,7 +9,6 @@ import logging
 import os
 import requests
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -68,6 +67,7 @@ class IsicApi(object):
         :return: The result of the GET request.
         """
         url = self._make_url(endpoint)
+        print(url)
         headers = {'Girder-Token': self.auth_token} if self.auth_token else None
         return requests.get(url, headers=headers)
 
@@ -89,15 +89,14 @@ class IsicApi(object):
         :param offset: The offset to start the request objects from.
         :return: A JSON response item.
         """
-        endpoint += '&' if '?' in endpoint else '?'
-        LIMIT = limit
-        offset = offset
+        # endpoint += '&' if '?' in endpoint else '?'
+
         while True:
-            resp = self.get(
-                f'{endpoint}limit={LIMIT:d}&offset={offset:d}'
-            ).json()
+            _endpoint = f'{endpoint}&limit={limit:d}&offset={offset:d}'
+
+            resp = self.get(_endpoint).json()
             if not resp:
                 break
             for elem in resp:
                 yield elem
-            offset += LIMIT
+            offset += limit
