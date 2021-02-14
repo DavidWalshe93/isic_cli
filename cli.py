@@ -4,6 +4,7 @@ Date:       12 February 2021
 """
 
 # Setup logger config
+import src.logger.logger_setup
 
 # Core Modules
 import logging

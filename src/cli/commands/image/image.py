@@ -20,7 +20,7 @@ from src.api.isic_api import IsicApi
 
 logger = logging.getLogger(__name__)
 
-ImageCommandParameters = namedtuple("ImageCommandParameters", ["limit", "offset", "sort", "desc", "detail", "name"])
+ImageCommandParameters = namedtuple("ImageCommandParameters", ["limit", "offset", "sort", "desc", "detail", "name", "timeout"])
 
 
 @click.group(**GROUP_CONTEXT_SETTINGS, short_help="Downloads an image")
@@ -30,6 +30,7 @@ ImageCommandParameters = namedtuple("ImageCommandParameters", ["limit", "offset"
 @click.option("--desc", is_flag=True, help="Sort order: 1 for ascending, -1 for descending.")
 @click.option("--detail", is_flag=True, callback=convert_bool_to_lower, help="Display the full information for each image, instead of a summary.")
 @click.option("--name", type=str, default="", help="Find an image with a specific name.")
+@click.option("--timeout", type=int, default=5, help="The request timeout length in seconds.")
 # @click.option("-f", "--filter", type=str, default="", help="Filter the images by a PegJS-specified grammar.")
 @kwargs_to_namedtuple(ImageCommandParameters)
 @click.pass_context
@@ -48,9 +49,11 @@ def image(ctx: Context, params: ImageCommandParameters):
         # Add name check if specified
         endpoint += f"&name={params.name}" if params.name != "" else ""
 
-        for item in api.get_json_list(endpoint=endpoint, limit=params.limit, offset=params.offset):
-            print(item)
+        print(len(list(api.get_json_list(endpoint=endpoint, limit=params.limit, offset=params.offset, timeout=params.timeout))))
+        print(list(api.get_json_list(endpoint=endpoint, limit=params.limit, offset=params.offset, timeout=params.timeout)))
 
+        # for item in api.get_json_list(endpoint=endpoint, limit=params.limit, offset=params.offset):
+        #     print(item)
 
 # ==================================================
 # Add CLI commands

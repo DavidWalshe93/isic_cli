@@ -55,38 +55,47 @@ class IsicApi(object):
         if not authResponse.ok:
             raise Exception(f'Login error: {authResponse.json()["message"]}')
 
-        authToken = authResponse.json()['auth_token']['token']
+        authToken = authResponse.json()['authToken']['token']
 
         return authToken
 
-    def get(self, endpoint):
+    def get(self, endpoint, timeout: int = 5):
         """
         Issues get request to ISIC storage service.
 
         :param endpoint: The endpoint to access.
+        :param timeout: The request timeout length in seconds.
         :return: The result of the GET request.
         """
         url = self._make_url(endpoint)
-        print(url)
         headers = {'Girder-Token': self.auth_token} if self.auth_token else None
-        return requests.get(url, headers=headers)
 
-    def get_json(self, endpoint):
+        # logger.info(f"Request: '{url}'")
+
+        return requests.get(url, headers=headers, timeout=timeout)
+
+    def get_json(self, endpoint, limit: int = 50, offset: int = 0, timeout: int = 5):
         """
         Returns the json content of the response.
 
         :param endpoint: The endpoint to access.
+        :param limit: The limit of the responses.
+        :param offset: The offset to start the request objects from.
+        :param timeout: The request timeout length in seconds.
         :return: The JSON segment of the response.
         """
-        return self.get(endpoint).json()
+        _endpoint = f'{endpoint}&limit={limit:d}&offset={offset:d}'
 
-    def get_json_list(self, endpoint, limit=50, offset=0):
+        return self.get(endpoint, timeout=timeout).json()
+
+    def get_json_list(self, endpoint, limit=50, offset=0, timeout: int = 5):
         """
         Retrieves a list of JSON objects depending on size of request.
 
         :param endpoint: The endpoint to access.
         :param limit: The limit of the responses.
         :param offset: The offset to start the request objects from.
+        :param timeout: The request timeout length in seconds.
         :return: A JSON response item.
         """
         # endpoint += '&' if '?' in endpoint else '?'
@@ -94,7 +103,7 @@ class IsicApi(object):
         while True:
             _endpoint = f'{endpoint}&limit={limit:d}&offset={offset:d}'
 
-            resp = self.get(_endpoint).json()
+            resp = self.get(_endpoint, timeout=timeout).json()
             if not resp:
                 break
             for elem in resp:
