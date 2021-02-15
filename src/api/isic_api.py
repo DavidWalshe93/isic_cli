@@ -8,21 +8,43 @@ Code sourced from: https://raw.githubusercontent.com/ImageMarkup/isic-archive/ma
 import logging
 import os
 import requests
+from functools import wraps
+from time import perf_counter
 
 logger = logging.getLogger(__name__)
+
+
+def timeit(func: callable):
+    """
+    Times how long a API request takes.
+    """
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        url = args[1]
+
+        start_time = perf_counter()
+        res = func(*args, **kwargs)
+        end_time = perf_counter()
+
+        logger.info(f"Response: {url} ({end_time - start_time:.2f}s).")
+
+        return res
+
+    return wrapper
 
 
 class IsicApi(object):
 
     def __init__(self,
                  hostname='https://isic-archive.com',
+                 login: bool = False,
                  username=os.environ.get("ISIC_USERNAME", None),
                  password=os.environ.get("ISIC_PASSWORD", None)):
 
         self.base_url = f'{hostname}/api/v1'
         self.auth_token = None
 
-        if username is not None:
+        if username is not None and login is True:
             if password is None:
                 password = input(f'Password for user "{username}":')
             self.auth_token = self._login(username, password)
@@ -70,8 +92,11 @@ class IsicApi(object):
         url = self._make_url(endpoint)
         headers = {'Girder-Token': self.auth_token} if self.auth_token else None
 
-        # logger.info(f"Request: '{url}'")
+        return self._get(url, headers=headers, timeout=timeout)
 
+    @timeit
+    def _get(self, url: str, headers: dict, timeout: int):
+        logger.info(f"Request: '{url}'")
         return requests.get(url, headers=headers, timeout=timeout)
 
     def get_json(self, endpoint, limit: int = 50, offset: int = 0, timeout: int = 5):
@@ -86,7 +111,7 @@ class IsicApi(object):
         """
         _endpoint = f'{endpoint}&limit={limit:d}&offset={offset:d}'
 
-        return self.get(endpoint, timeout=timeout).json()
+        return self.get(_endpoint, timeout=timeout).json()
 
     def get_json_list(self, endpoint, limit=50, offset=0, timeout: int = 5):
         """
