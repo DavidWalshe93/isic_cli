@@ -139,12 +139,6 @@ def process_results(params: MetadataCommandParameters, results: List[dict]) -> U
         raise e
 
 
-def chunks(data: list, n: int) -> list:
-    """Yield successive n-sized chunks from lst."""
-    for i in range(0, len(data), n):
-        yield data[i:i + n]
-
-
 def make_request(api: IsicApi, limit: int, offset: int, timeout: int) -> Union[List[dict], None]:
     """
     Make a metadata request to the API.

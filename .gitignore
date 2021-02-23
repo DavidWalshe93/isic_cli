@@ -134,3 +134,17 @@ dmypy.json
 /.idea/inspectionProfiles/profiles_settings.xml
 /.idea/inspectionProfiles/Project_Default.xml
 /.idea/vcs.xml
+/isic_images/
+/isic_images_extracted/
+/a.json
+/alias.sh
+/bcn20000.json
+/metadata.csv
+/failed_download_batches.json
+/output4.csv
+/output2.csv
+/output.json
+/output.csv
+/missing_records.json
+/metadata_temp.csv
+/test.csv

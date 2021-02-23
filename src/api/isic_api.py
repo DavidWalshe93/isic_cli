@@ -22,11 +22,17 @@ def timeit(func: callable):
     def wrapper(*args, **kwargs):
         url = args[1]
 
+        if len(url) > 100:
+            url = url[:100]
+            url = f"{url}..."
+
+        logger.info(f"Request: '{url}'")
+
         start_time = perf_counter()
         res = func(*args, **kwargs)
         end_time = perf_counter()
 
-        logger.info(f"Response: {url} ({end_time - start_time:.2f}s).")
+        logger.info(f"Response: '{url}' ({end_time - start_time:.2f}s).")
 
         return res
 
@@ -96,7 +102,6 @@ class IsicApi(object):
 
     @timeit
     def _get(self, url: str, headers: dict, timeout: int):
-        logger.info(f"Request: '{url}'")
         return requests.get(url, headers=headers, timeout=timeout)
 
     def get_json(self, endpoint, limit: int = 50, offset: int = 0, timeout: int = 5):

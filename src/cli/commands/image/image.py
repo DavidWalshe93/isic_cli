@@ -15,6 +15,8 @@ from src.cli.validators import convert_bool_to_lower
 
 # Commands
 from src.cli.commands.image.metadata import metadata
+from src.cli.commands.image.download import download
+from src.cli.commands.image.unzip import unzip
 
 from src.api.isic_api import IsicApi
 
@@ -59,7 +61,9 @@ def image(ctx: Context, params: ImageCommandParameters):
 # Add CLI commands
 # ==================================================
 commands = [
-    metadata
+    metadata,
+    download,
+    unzip
 ]
 
 for command in commands:
