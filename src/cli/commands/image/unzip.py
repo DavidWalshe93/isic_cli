@@ -28,9 +28,7 @@ UnzipCommandParameters = namedtuple("UnzipCommandParameter", ["zip_dir", "output
 @kwargs_to_namedtuple(UnzipCommandParameters)
 def unzip(params: UnzipCommandParameters):
     """
-
-    :param params:
-    :return:
+    Unzips and collects all images into a single directory.
     """
     # Extraction path.
     create_extraction_path(params)

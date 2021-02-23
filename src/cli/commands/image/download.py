@@ -38,9 +38,7 @@ DownloadCommandParameters = namedtuple("DownloadCommandParameters", ["metadata_f
 @kwargs_to_namedtuple(DownloadCommandParameters)
 def download(params: DownloadCommandParameters):
     """
-
-    :param params:
-    :return:
+    Download a group of images based on their ISIC imageIds.
     """
     # Show available datasets if non are selected.
     if params.dataset is None:
